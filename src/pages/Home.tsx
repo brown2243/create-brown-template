@@ -1,6 +1,7 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 import { getPosts } from "src/apis/testAPI";
+import useSelector from "src/store";
 import styled from "src/styles/styled";
 
 const Container = styled.div`
@@ -13,8 +14,18 @@ function Home() {
     queryFn: () => getPosts(),
     placeholderData: keepPreviousData,
   });
-  console.log(isPending, data);
-  return <Container></Container>;
+
+  const counter = useSelector((state) => state.counter);
+  const increaseCounter = useSelector((state) => state.increaseCounter);
+
+  return (
+    <Container>
+      <div>
+        <span>{counter}</span>
+        <button onClick={increaseCounter}>increase</button>
+      </div>
+    </Container>
+  );
 }
 
 export default Home;

@@ -111,6 +111,16 @@ label {
   outline: none;
 }
 
+h1:focus,
+h2:focus,
+h3:focus,
+h4:focus,
+button:focus,
+input:focus,
+label:focus {
+  outline: none;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

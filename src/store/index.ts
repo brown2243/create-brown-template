@@ -1,13 +1,15 @@
 import { create } from "zustand";
 
-interface IUseStore {
+interface IUseBasicStore {
   counter: number;
   increaseCounter: () => void;
 }
 
-const useStore = create<IUseStore>()((set) => ({
+const store = create<IUseBasicStore>()((set) => ({
   counter: 0,
   increaseCounter: () => set((state) => ({ counter: state.counter + 1 })),
 }));
 
-export default useStore;
+const useSelector = store;
+
+export default useSelector;
