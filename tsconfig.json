@@ -22,7 +22,10 @@
     "noFallthroughCasesInSwitch": true,
     //
     "baseUrl": ".",
-    "jsxImportSource": "@emotion/react"
+    "jsxImportSource": "@emotion/react",
+    "paths": {
+      "@emotion/styled": ["node_modules/@emotion/styled"]
+    }
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

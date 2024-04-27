@@ -1,4 +1,5 @@
 import "@emotion/react";
+
 import { COLORS } from "src/utils/constant";
 
 type Colors = typeof COLORS;
@@ -19,4 +20,10 @@ declare module "@emotion/react" {
       b: "700";
     };
   }
+}
+
+declare module "@emotion/styled" {
+  import emotionStyled from "@emotion/styled";
+  const styled = emotionStyled;
+  export default styled;
 }

@@ -1,4 +1,4 @@
-import styled from "src/styles/styled";
+import styled from "@emotion/styled";
 
 const Container = styled.footer`
   width: 100%;
