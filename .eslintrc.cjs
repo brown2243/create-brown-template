@@ -18,7 +18,6 @@ module.exports = {
     "@typescript-eslint",
     "react-hooks",
     "import",
-    "import-helpers",
   ],
   rules: {
     "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
@@ -32,20 +31,6 @@ module.exports = {
         alphabetize: {
           order: "asc",
           caseInsensitive: true,
-        },
-      },
-    ],
-    "import-helpers/order-imports": [
-      "warn",
-      {
-        newlinesBetween: "always",
-        groups: [
-          ["module", "/^@/"],
-          ["parent", "sibling", "index"],
-        ],
-        alphabetize: {
-          order: "asc",
-          ignoreCase: true,
         },
       },
     ],
