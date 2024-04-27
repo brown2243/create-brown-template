@@ -1,33 +1,40 @@
-import { useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
 
-import reactLogo from "./assets/react.svg";
+import Footer from "src/components/Footer";
+import Header from "src/components/Header";
+import Home from "src/pages/Home";
+import styled from "src/styles/styled";
+import { HOME_PATH } from "src/utils/constant";
 
-import viteLogo from "/vite.svg";
+const AppLayout = styled.div`
+  width: 100%;
+  height: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
 
-import "./App.css";
+const BodyLayout = styled.div`
+  width: 1240px;
+  height: 100%;
+  flex-grow: 1;
+  background-color: ${(props) => props.theme.color.blueViolet};
+`;
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
+    <AppLayout>
+      <Header />
+      <BodyLayout>
+        <Routes>
+          <Route path={HOME_PATH} element={<Home />} />
+          {/*  */}
+          <Route path="*" element={<Navigate replace to={HOME_PATH} />} />
+        </Routes>
+      </BodyLayout>
+      <Footer />
+    </AppLayout>
   );
 }
 
