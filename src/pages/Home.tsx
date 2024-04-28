@@ -6,9 +6,9 @@ import useStoreSelector from "src/store";
 
 const Container = styled.div`
   height: 100%;
+  width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
 `;
 
 function Home() {
@@ -25,8 +25,10 @@ function Home() {
 
   return (
     <Container>
-      <span>{counter}</span>
-      <button onClick={increaseCounter}>increase</button>
+      <div>
+        <span>{counter}</span>
+        <button onClick={increaseCounter}>increase</button>
+      </div>
     </Container>
   );
 }
