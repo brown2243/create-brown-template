@@ -5,6 +5,7 @@ import Footer from "src/components/Footer";
 import Header from "src/components/Header";
 import Home from "src/pages/Home";
 import { HOME_PATH } from "src/utils/constant";
+
 const AppLayout = styled.div`
   width: 100%;
   height: 100vh;

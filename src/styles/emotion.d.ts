@@ -21,10 +21,4 @@ declare module "@emotion/react" {
     };
   }
 }
-
 declare module "@emotion/styled" {}
-
-declare module "my-module" {
-  export function myFunction(): void;
-  export const myVariable: string;
-}
