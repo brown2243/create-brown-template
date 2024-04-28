@@ -51,7 +51,6 @@ module.exports = {
     "jsx-a11y/role-supports-aria-props": "warn",
     "react/no-unknown-property": "off",
     "react/prop-types": "off",
-
     "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-unused-vars": "warn",
