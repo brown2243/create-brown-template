@@ -4,7 +4,6 @@ module.exports = {
   plugins: [
     "react-refresh",
     //
-    "prettier",
     "@typescript-eslint",
     "react-hooks",
     "import",
