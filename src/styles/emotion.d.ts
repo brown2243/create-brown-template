@@ -22,8 +22,9 @@ declare module "@emotion/react" {
   }
 }
 
-declare module "@emotion/styled" {
-  import emotionStyled from "@emotion/styled";
-  const styled = emotionStyled;
-  export default styled;
+declare module "@emotion/styled" {}
+
+declare module "my-module" {
+  export function myFunction(): void;
+  export const myVariable: string;
 }

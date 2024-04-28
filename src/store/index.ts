@@ -10,6 +10,6 @@ const store = create<IUseBasicStore>()((set) => ({
   increaseCounter: () => set((state) => ({ counter: state.counter + 1 })),
 }));
 
-const useSelector = store;
+const useStoreSelector = store;
 
-export default useSelector;
+export default useStoreSelector;
