@@ -11,7 +11,8 @@ const yellow: ColorCode = "#FFD700";
 //
 const up = red;
 const down = blueViolet;
-export const COLORS = {
+
+const color = {
   white,
   black,
   creamYellow,
@@ -24,7 +25,7 @@ export const COLORS = {
 } as const;
 
 export const THEME = {
-  color: COLORS,
+  color,
   fs: {
     xxl: "2.5rem",
     xl: "2rem",
