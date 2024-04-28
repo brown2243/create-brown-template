@@ -23,6 +23,23 @@ export const COLORS = {
   yellow,
 } as const;
 
+export const THEME = {
+  color: COLORS,
+  fs: {
+    xxl: "2.5rem",
+    xl: "2rem",
+    l: "1.5rem",
+    m: "1rem",
+    s: "0.875rem",
+    xs: "0.75rem",
+  },
+  fw: {
+    s: "400",
+    m: "500",
+    b: "700",
+  },
+} as const;
+
 const BREAK_POINTS = {
   tablet: 1200,
   mobile: 768,
