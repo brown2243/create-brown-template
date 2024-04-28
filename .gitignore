@@ -24,10 +24,6 @@ dist-ssr
 *.sln
 *.sw?
  
-# lockfile
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
 
 # env
 .env
