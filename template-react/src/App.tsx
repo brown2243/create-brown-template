@@ -17,7 +17,6 @@ const AppLayout = styled.div`
 const BodyLayout = styled.div`
   width: 1240px;
   height: 100%;
-  background-color: ${(props) => props.theme.color.blueViolet};
 `;
 
 function App() {
