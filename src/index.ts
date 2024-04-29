@@ -7,6 +7,16 @@ import prompts from "prompts";
 import { red, reset } from "kolorist";
 import { FRAMEWORKS } from "src/utils/constants";
 import { Framework } from "src/utils/types";
+import {
+  copy,
+  emptyDir,
+  formatTargetDir,
+  isEmpty,
+  isValidPackageName,
+  pkgFromUserAgent,
+  setupReactSwc,
+  toValidPackageName,
+} from "src/utils/helpers";
 
 // Avoids autoconversion to number of the project name by defining that the args
 // non associated with an option ( _ ) needs to be parsed as a string. See #4606
@@ -15,7 +25,6 @@ const argv = minimist<{
   template?: string;
 }>(process.argv.slice(2), { string: ["_"] });
 const cwd = process.cwd();
-
 const TEMPLATES = FRAMEWORKS.map(
   (f) => (f.variants && f.variants.map((v) => v.name)) || [f.name]
 ).reduce((a, b) => a.concat(b), []);
@@ -25,6 +34,7 @@ const renameFiles: Record<string, string | undefined> = {
 };
 
 const defaultTargetDir = "vite-project";
+console.log(argv, cwd, TEMPLATES);
 
 async function init() {
   const argTargetDir = formatTargetDir(argv._[0]);
@@ -41,6 +51,8 @@ async function init() {
   prompts.override({
     overwrite: argv.overwrite,
   });
+  console.log(argv, cwd, TEMPLATES);
+  console.log(argv.overwrite);
 
   try {
     result = await prompts(
@@ -261,93 +273,6 @@ async function init() {
       break;
   }
   console.log();
-}
-
-function formatTargetDir(targetDir: string | undefined) {
-  return targetDir?.trim().replace(/\/+$/g, "");
-}
-
-function copy(src: string, dest: string) {
-  const stat = fs.statSync(src);
-  if (stat.isDirectory()) {
-    copyDir(src, dest);
-  } else {
-    fs.copyFileSync(src, dest);
-  }
-}
-
-function isValidPackageName(projectName: string) {
-  return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(
-    projectName
-  );
-}
-
-function toValidPackageName(projectName: string) {
-  return projectName
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/^[._]/, "")
-    .replace(/[^a-z\d\-~]+/g, "-");
-}
-
-function copyDir(srcDir: string, destDir: string) {
-  fs.mkdirSync(destDir, { recursive: true });
-  for (const file of fs.readdirSync(srcDir)) {
-    const srcFile = path.resolve(srcDir, file);
-    const destFile = path.resolve(destDir, file);
-    copy(srcFile, destFile);
-  }
-}
-
-function isEmpty(path: string) {
-  const files = fs.readdirSync(path);
-  return files.length === 0 || (files.length === 1 && files[0] === ".git");
-}
-
-function emptyDir(dir: string) {
-  if (!fs.existsSync(dir)) {
-    return;
-  }
-  for (const file of fs.readdirSync(dir)) {
-    if (file === ".git") {
-      continue;
-    }
-    fs.rmSync(path.resolve(dir, file), { recursive: true, force: true });
-  }
-}
-
-function pkgFromUserAgent(userAgent: string | undefined) {
-  if (!userAgent) return undefined;
-  const pkgSpec = userAgent.split(" ")[0];
-  const pkgSpecArr = pkgSpec.split("/");
-  return {
-    name: pkgSpecArr[0],
-    version: pkgSpecArr[1],
-  };
-}
-
-function setupReactSwc(root: string, isTs: boolean) {
-  editFile(path.resolve(root, "package.json"), (content) => {
-    return content.replace(
-      /"@vitejs\/plugin-react": ".+?"/,
-      `"@vitejs/plugin-react-swc": "^3.5.0"`
-    );
-  });
-  editFile(
-    path.resolve(root, `vite.config.${isTs ? "ts" : "js"}`),
-    (content) => {
-      return content.replace(
-        "@vitejs/plugin-react",
-        "@vitejs/plugin-react-swc"
-      );
-    }
-  );
-}
-
-function editFile(file: string, callback: (content: string) => string) {
-  const content = fs.readFileSync(file, "utf-8");
-  fs.writeFileSync(file, callback(content), "utf-8");
 }
 
 init().catch((e) => {
