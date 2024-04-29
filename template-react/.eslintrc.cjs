@@ -2,25 +2,23 @@ module.exports = {
   root: true,
   env: { browser: true, es2020: true },
   plugins: [
+    "@typescript-eslint",
+    "import",
     "react",
     "react-hooks",
     "react-refresh",
-    //
-    "@typescript-eslint",
-    "import",
+    "@tanstack/query",
     "jsx-a11y",
   ],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended-type-checked",
-    //
     "plugin:react/recommended",
-    "plugin:react-hooks/recommended",
     "plugin:react/jsx-runtime",
+    "plugin:react-hooks/recommended",
     "plugin:@tanstack/eslint-plugin-query/recommended",
-    //
+    "plugin:jsx-a11y/recommended",
     "prettier",
-    "eslint-config-prettier",
   ],
   settings: {
     react: {
@@ -76,7 +74,13 @@ module.exports = {
           },
         ],
         pathGroupsExcludedImportTypes: ["react", "/**", "src/**"],
-        groups: ["builtin", "external", "internal", ["parent", "sibling", "index"], ["object", "type"]],
+        groups: [
+          "builtin",
+          "external",
+          "internal",
+          ["parent", "sibling", "index"],
+          ["object", "type"],
+        ],
         "newlines-between": "always",
         alphabetize: {
           order: "asc",
