@@ -1,13 +1,12 @@
 {
   "name": "create-brown-template",
-  "version": "0.1.1",
+  "version": "0.1.5",
   "description": "프로젝트 구축",
   "author": "brown",
   "main": "index.js",
   "type": "module",
   "bin": {
-    "create-brown-template": "index.js",
-    "cbt": "index.js"
+    "create-brown-template": "index.js"
   },
   "files": [
     "index.js",
@@ -22,7 +21,8 @@
     "publish": "npm publish"
   },
   "keywords": [
-    "create-template"
+    "create-template",
+    "react-template"
   ],
   "license": "ISC",
   "devDependencies": {

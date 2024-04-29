@@ -1,11 +1,9 @@
 # brown's react template
 
-## dependencys
+매번 세팅하기 불편해 create-vite-app을 참고해서 작성 했습니다.
 
-- minimist: argv 처리
-- kolorist: cli color
-- prompts: cli interactive prompts
-
-## scripts
-
-local test: `yarn test -- t -t react`
+```
+npx create-brown-template
+npx create-brown-template my-app -t react
+npx create-brown-template my-app --template react
+```
