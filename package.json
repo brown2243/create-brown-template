@@ -16,6 +16,7 @@
   ],
   "scripts": {
     "dev": "unbuild --stub",
+    "test": "yarn dev; node index.js",
     "build": "unbuild",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "npm run build"

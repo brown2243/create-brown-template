@@ -1,12 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import spawn from "cross-spawn";
 import minimist from "minimist";
 import prompts from "prompts";
 import { red, reset } from "kolorist";
-import { FRAMEWORKS } from "src/utils/constants";
-import { Framework } from "src/utils/types";
+import { DEFAULT_TARGET_DIR, FRAMEWORKS } from "src/utils/constants";
 import {
   copy,
   emptyDir,
@@ -14,7 +12,6 @@ import {
   isEmpty,
   isValidPackageName,
   pkgFromUserAgent,
-  setupReactSwc,
   toValidPackageName,
 } from "src/utils/helpers";
 
@@ -25,47 +22,54 @@ const argv = minimist<{
   template?: string;
 }>(process.argv.slice(2), { string: ["_"] });
 const cwd = process.cwd();
-const TEMPLATES = FRAMEWORKS.map(
-  (f) => (f.variants && f.variants.map((v) => v.name)) || [f.name]
-).reduce((a, b) => a.concat(b), []);
+const TEMPLATES = FRAMEWORKS.map((framework) => framework.name);
 
 const renameFiles: Record<string, string | undefined> = {
   _gitignore: ".gitignore",
 };
 
-const defaultTargetDir = "vite-project";
-console.log(argv, cwd, TEMPLATES);
-
+// { _: [] } /Users/brown/dev/create-brown-template [
+//   'vanilla-ts',           'vanilla',
+//   'vue-ts',               'vue',
+//   'custom-create-vue',    'custom-nuxt',
+//   'react-ts',             'react-swc-ts',
+//   'react',                'react-swc',
+//   'custom-remix',         'preact-ts',
+//   'preact',               'lit-ts',
+//   'lit',                  'svelte-ts',
+//   'svelte',               'custom-svelte-kit',
+//   'solid-ts',             'solid',
+//   'qwik-ts',              'qwik',
+//   'custom-qwik-city',     'create-vite-extra',
+//   'create-electron-vite'
+// ]
+// { _: [ 'create-brown-template' ], template: 'react-ts' } /Users/brown/dev/create-brown-template
 async function init() {
   const argTargetDir = formatTargetDir(argv._[0]);
   const argTemplate = argv.template || argv.t;
-
-  let targetDir = argTargetDir || defaultTargetDir;
+  console.log("arg", argTargetDir, argTemplate);
+  let targetDir = argTargetDir || DEFAULT_TARGET_DIR;
   const getProjectName = () =>
     targetDir === "." ? path.basename(path.resolve()) : targetDir;
 
   let result: prompts.Answers<
-    "projectName" | "overwrite" | "packageName" | "framework" | "variant"
+    "projectName" | "overwrite" | "packageName" | "template"
   >;
-
-  prompts.override({
-    overwrite: argv.overwrite,
-  });
-  console.log(argv, cwd, TEMPLATES);
-  console.log(argv.overwrite);
 
   try {
     result = await prompts(
       [
+        //
         {
           type: argTargetDir ? null : "text",
           name: "projectName",
           message: reset("Project name:"),
-          initial: defaultTargetDir,
+          initial: DEFAULT_TARGET_DIR,
           onState: (state) => {
-            targetDir = formatTargetDir(state.value) || defaultTargetDir;
+            targetDir = formatTargetDir(state.value) || DEFAULT_TARGET_DIR;
           },
         },
+        // 경로
         {
           type: () =>
             !fs.existsSync(targetDir) || isEmpty(targetDir) ? null : "select",
@@ -111,7 +115,7 @@ async function init() {
         {
           type:
             argTemplate && TEMPLATES.includes(argTemplate) ? null : "select",
-          name: "framework",
+          name: "template",
           message:
             typeof argTemplate === "string" && !TEMPLATES.includes(argTemplate)
               ? reset(
@@ -123,23 +127,9 @@ async function init() {
             const frameworkColor = framework.color;
             return {
               title: frameworkColor(framework.display || framework.name),
-              value: framework,
+              value: framework.name,
             };
           }),
-        },
-        {
-          type: (framework: Framework) =>
-            framework && framework.variants ? "select" : null,
-          name: "variant",
-          message: reset("Select a variant:"),
-          choices: (framework: Framework) =>
-            framework.variants.map((variant) => {
-              const variantColor = variant.color;
-              return {
-                title: variantColor(variant.display || variant.name),
-                value: variant.name,
-              };
-            }),
         },
       ],
       {
@@ -154,8 +144,7 @@ async function init() {
   }
 
   // user choice associated with prompts
-  const { framework, overwrite, packageName, variant } = result;
-
+  const { template, overwrite, packageName } = result;
   const root = path.join(cwd, targetDir);
 
   if (overwrite === "yes") {
@@ -164,60 +153,8 @@ async function init() {
     fs.mkdirSync(root, { recursive: true });
   }
 
-  // determine template
-  let template: string = variant || framework?.name || argTemplate;
-  let isReactSwc = false;
-  if (template.includes("-swc")) {
-    isReactSwc = true;
-    template = template.replace("-swc", "");
-  }
-
   const pkgInfo = pkgFromUserAgent(process.env.npm_config_user_agent);
   const pkgManager = pkgInfo ? pkgInfo.name : "npm";
-  const isYarn1 = pkgManager === "yarn" && pkgInfo?.version.startsWith("1.");
-
-  const { customCommand } =
-    FRAMEWORKS.flatMap((f) => f.variants).find((v) => v.name === template) ??
-    {};
-
-  if (customCommand) {
-    const fullCustomCommand = customCommand
-      .replace(/^npm create /, () => {
-        // `bun create` uses it's own set of templates,
-        // the closest alternative is using `bun x` directly on the package
-        if (pkgManager === "bun") {
-          return "bun x create-";
-        }
-        return `${pkgManager} create `;
-      })
-      // Only Yarn 1.x doesn't support `@version` in the `create` command
-      .replace("@latest", () => (isYarn1 ? "" : "@latest"))
-      .replace(/^npm exec/, () => {
-        // Prefer `pnpm dlx`, `yarn dlx`, or `bun x`
-        if (pkgManager === "pnpm") {
-          return "pnpm dlx";
-        }
-        if (pkgManager === "yarn" && !isYarn1) {
-          return "yarn dlx";
-        }
-        if (pkgManager === "bun") {
-          return "bun x";
-        }
-        // Use `npm exec` in all other cases,
-        // including Yarn 1.x and other custom npm clients.
-        return "npm exec";
-      });
-
-    const [command, ...args] = fullCustomCommand.split(" ");
-    // we replace TARGET_DIR here because targetDir may include a space
-    const replacedArgs = args.map((arg) =>
-      arg.replace("TARGET_DIR", targetDir)
-    );
-    const { status } = spawn.sync(command, replacedArgs, {
-      stdio: "inherit",
-    });
-    process.exit(status ?? 0);
-  }
 
   console.log(`\nScaffolding project in ${root}...`);
 
@@ -248,10 +185,6 @@ async function init() {
   pkg.name = packageName || getProjectName();
 
   write("package.json", JSON.stringify(pkg, null, 2) + "\n");
-
-  if (isReactSwc) {
-    setupReactSwc(root, template.endsWith("-ts"));
-  }
 
   const cdProjectName = path.relative(cwd, root);
   console.log(`\nDone. Now run:\n`);
