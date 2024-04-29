@@ -47,7 +47,7 @@ const renameFiles: Record<string, string | undefined> = {
 async function init() {
   const argTargetDir = formatTargetDir(argv._[0]);
   const argTemplate = argv.template || argv.t;
-  console.log("arg", argTargetDir, argTemplate);
+
   let targetDir = argTargetDir || DEFAULT_TARGET_DIR;
   const getProjectName = () =>
     targetDir === "." ? path.basename(path.resolve()) : targetDir;
@@ -144,7 +144,10 @@ async function init() {
   }
 
   // user choice associated with prompts
-  const { template, overwrite, packageName } = result;
+
+  const { overwrite, packageName } = result;
+  const template = argTemplate || result.template;
+
   const root = path.join(cwd, targetDir);
 
   if (overwrite === "yes") {
