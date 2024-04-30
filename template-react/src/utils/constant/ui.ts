@@ -43,10 +43,11 @@ export const THEME = {
 
 const BREAK_POINTS = {
   tablet: 1200,
-  mobile: 768,
+  pad: 768,
+  mobile: 360,
 } as const;
 
-const customMediaQuery = (minWidth: number): string => `@media (min-width: ${minWidth}px)`;
+const customMediaQuery = (maxWidth: number): string => `@media (max-width: ${maxWidth}px)`;
 export const mq = (Object.keys(BREAK_POINTS) as Array<keyof typeof BREAK_POINTS>).reduce(
   (acc, cur) => {
     acc[cur] = customMediaQuery(BREAK_POINTS[cur]);
