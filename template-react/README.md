@@ -1,5 +1,9 @@
 # brown's react template
 
+간단한 프로젝트 템플릿을 만들어 봤습니다.
+
+좋은 아이디어나 개선점 알려주시면 감사하겠습니다.
+
 프로젝트 구축
 
 - vite react-ts template
