@@ -1,1 +1,1 @@
-export type ColorCode = `#${string}`;
+export type * from "./ui";
