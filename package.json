@@ -1,7 +1,7 @@
 {
   "name": "create-brown-template",
-  "version": "0.1.7",
-  "description": "프로젝트 구축",
+  "version": "0.1.8",
+  "description": "Let's build new project",
   "author": "brown",
   "main": "index.js",
   "type": "module",
