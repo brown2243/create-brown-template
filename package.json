@@ -1,6 +1,6 @@
 {
   "name": "create-brown-template",
-  "version": "0.1.8",
+  "version": "0.1.10",
   "description": "Let's build new project",
   "author": "brown",
   "main": "index.js",
