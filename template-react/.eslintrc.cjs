@@ -52,7 +52,13 @@ module.exports = {
     "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/no-unused-vars": "warn",
-    "import/newline-after-import": "warn",
+    "@typescript-eslint/consistent-type-imports": ["error", { prefer: "type-imports" }],
+    "@typescript-eslint/no-misused-promises": [
+      "error",
+      {
+        checksVoidReturn: false,
+      },
+    ],
     "import/order": [
       "error",
       {
