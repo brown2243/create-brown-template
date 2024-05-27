@@ -1,6 +1,8 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 
 import { SERVER_URL } from "src/utils/constant";
+
+import type { AxiosRequestConfig } from "axios";
 
 const baseURL = SERVER_URL;
 const axiosInstance = axios.create({

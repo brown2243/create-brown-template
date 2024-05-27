@@ -1,1 +1,1 @@
-export const SERVER_URL = "https://jsonplaceholder.typicode.com";
+export const SERVER_URL = import.meta.env.VITE_SERVER_URL;
