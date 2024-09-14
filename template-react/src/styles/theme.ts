@@ -1,3 +1,3 @@
-import { THEME } from "src/utils/constant";
+import { THEME } from "src/common/constant";
 
 export const theme = THEME;

@@ -1,4 +1,4 @@
-import { getRequest } from "src/apis/httpAPI";
-import { type IPost } from "src/utils/interfaces";
+import { HTTP } from "src/apis/httpAPI";
+import { type IPost } from "src/common/interfaces";
 
-export const getPosts = () => getRequest<IPost[]>({ url: "/posts" });
+export const getPosts = () => HTTP.get<IPost[]>({ url: "/posts" });

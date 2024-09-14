@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
 import { Navigate, Route, Routes } from "react-router-dom";
 
+import { PATH } from "src/common/constant";
 import Footer from "src/components/Footer";
 import Header from "src/components/Header";
 import Home from "src/pages/Home";
-import { HOME_PATH } from "src/utils/constant";
 
 const AppLayout = styled.div`
   width: 100%;
@@ -25,9 +25,9 @@ function App() {
       <Header />
       <BodyLayout>
         <Routes>
-          <Route path={HOME_PATH} element={<Home />} />
+          <Route path={PATH.HOME} element={<Home />} />
           {/*  */}
-          <Route path="*" element={<Navigate replace to={HOME_PATH} />} />
+          <Route path="*" element={<Navigate replace to={PATH.HOME} />} />
         </Routes>
       </BodyLayout>
       <Footer />

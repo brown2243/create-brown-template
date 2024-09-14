@@ -1,6 +1,6 @@
 import "@emotion/react";
 
-import { THEME } from "src/utils/constant";
+import { THEME } from "src/common/constant";
 
 declare module "@emotion/react" {
   export type Theme = typeof THEME;

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { SERVER_URL } from "src/utils/constant";
+import { SERVER_URL } from "src/common/constant";
 
 import type { AxiosRequestConfig } from "axios";
 
@@ -12,7 +12,6 @@ const axiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
-
 const request = <T>(req: AxiosRequestConfig) =>
   axiosInstance<T>(req)
     .then((res) => res.data)
@@ -21,23 +20,25 @@ const request = <T>(req: AxiosRequestConfig) =>
       throw error;
     });
 
-export const getRequest = <T>(req: AxiosRequestConfig) =>
-  request<T>({
-    ...req,
-    method: "GET",
-  });
-export const postRequest = <T>(req: AxiosRequestConfig) =>
-  request<T>({
-    ...req,
-    method: "POST",
-  });
-export const putRequest = <T>(req: AxiosRequestConfig) =>
-  request<T>({
-    ...req,
-    method: "PUT",
-  });
-export const delRequest = <T>(req: AxiosRequestConfig) =>
-  request<T>({
-    ...req,
-    method: "DELETE",
-  });
+export const HTTP = {
+  get: <T>(req: AxiosRequestConfig) =>
+    request<T>({
+      ...req,
+      method: "GET",
+    }),
+  post: <T>(req: AxiosRequestConfig) =>
+    request<T>({
+      ...req,
+      method: "POST",
+    }),
+  put: <T>(req: AxiosRequestConfig) =>
+    request<T>({
+      ...req,
+      method: "PUT",
+    }),
+  del: <T>(req: AxiosRequestConfig) =>
+    request<T>({
+      ...req,
+      method: "DELETE",
+    }),
+} as const;
